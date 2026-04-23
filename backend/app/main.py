@@ -20,7 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.lifespan("startup")
+@app.on_event("startup")
 def on_startup() -> None:
     ensure_upload_dir()
     Base.metadata.create_all(bind=engine)
