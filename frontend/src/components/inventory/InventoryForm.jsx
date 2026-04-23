@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 function InventoryForm({
   initialValues,
@@ -10,11 +10,6 @@ function InventoryForm({
   const [inventoryName, setInventoryName] = useState(initialValues.inventory_name || '')
   const [description, setDescription] = useState(initialValues.description || '')
   const [localError, setLocalError] = useState('')
-
-  useEffect(() => {
-    setInventoryName(initialValues.inventory_name || '')
-    setDescription(initialValues.description || '')
-  }, [initialValues.inventory_name, initialValues.description])
 
   const handleSubmit = async (event) => {
     event.preventDefault()

@@ -16,21 +16,19 @@ function AdminInventoryPage() {
     [isLoading, error, items],
   )
 
-  const loadItems = async () => {
-    setIsLoading(true)
-    setError('')
-    try {
-      const data = await fetchInventoryList()
-      setItems(data)
-    } catch (loadError) {
-      setError(loadError.message)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   useEffect(() => {
-    loadItems()
+    const loadInitialItems = async () => {
+      try {
+        const data = await fetchInventoryList()
+        setItems(data)
+      } catch (loadError) {
+        setError(loadError.message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadInitialItems()
   }, [])
 
   const handleDeleteConfirm = async () => {

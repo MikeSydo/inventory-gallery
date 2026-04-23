@@ -85,6 +85,7 @@ function AdminInventoryEditPage() {
       {!isLoading && !loadError && item && (
         <>
           <InventoryForm
+            key={item.id}
             initialValues={{ inventory_name: item.inventory_name, description: item.description || '' }}
             submitLabel="Оновити текстові дані"
             isSubmitting={isTextSubmitting}
