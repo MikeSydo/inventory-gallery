@@ -63,9 +63,11 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
+  margin-top: 20px;
 }
 
 .btnPrimary {
+  margin-top: 20px;
   background: #0f766e;
   border-color: #0f766e;
   color: #ffffff;
@@ -75,6 +77,8 @@ body {
   background: #be123c;
   border-color: #be123c;
   color: #ffffff;
+  margin-top: 20px;
+  
 }
 
 .tableWrapper {
@@ -133,6 +137,7 @@ body {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .state {
