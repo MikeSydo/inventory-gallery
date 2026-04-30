@@ -6,10 +6,10 @@ import InventoryQuickView from '../components/gallery/InventoryQuickView'
 import { useFavorites } from '../hooks/useFavorites'
 import { fetchInventoryList } from '../services/inventoryApi'
 
-function GallerySkeleton() {
+function FavoritesSkeleton() {
   return (
-    <section className="galleryGrid" aria-label="Завантаження інвентарю">
-      {Array.from({ length: 6 }, (_, index) => (
+    <section className="galleryGrid" aria-label="Завантаження улюблених">
+      {Array.from({ length: 3 }, (_, index) => (
         <article key={index} className="galleryCard galleryCardSkeleton" aria-hidden="true">
           <div className="galleryCardMedia skeletonBlock" />
           <div className="galleryCardContent">
@@ -22,7 +22,7 @@ function GallerySkeleton() {
   )
 }
 
-function GalleryPage() {
+function FavoritesPage() {
   const [items, setItems] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
@@ -47,62 +47,66 @@ function GalleryPage() {
     loadItems()
   }, [])
 
-  const isEmpty = useMemo(
-    () => !isLoading && !error && items.length === 0,
-    [error, isLoading, items.length],
+  const favoriteItems = useMemo(
+    () => items.filter((item) => favoriteIds.includes(item.id)),
+    [favoriteIds, items],
   )
+
+  const isEmpty = !isLoading && !error && favoriteItems.length === 0
 
   return (
     <main className="galleryPageShell">
       <section className="galleryHero">
         <div className="galleryHeroTopbar">
           <div>
-            <p className="galleryKicker">Вітрина складу</p>
-            <h1>Галерея інвентарю</h1>
+            <p className="galleryKicker">Персональна добірка</p>
+            <h1>Улюблений інвентар</h1>
           </div>
 
-          <Link className="galleryAdminLink" to="/admin/inventory">Відкрити адмін-панель</Link>
+          <Link className="galleryAdminLink" to="/admin/inventory">
+            Відкрити адмін-панель
+          </Link>
         </div>
 
         <div className="galleryHeroBody">
           <div className="galleryHeroCopy">
             <p className="galleryLead">
-              Переглядайте доступний інвентар у візуальній галереї та відкривайте
-              будь-яку позицію для детальнішого перегляду.
+              Тут зібрані позиції, які ти позначив як улюблені. Їх можна швидко
+              переглядати та прибирати з добірки просто з картки.
             </p>
           </div>
 
           <div className="galleryHeroStats">
             <div className="galleryStatCard">
-              <span className="galleryStatValue">{items.length}</span>
-              <span className="galleryStatLabel">позицій доступно</span>
+              <span className="galleryStatValue">{favoriteCount}</span>
+              <span className="galleryStatLabel">позицій в обраному</span>
             </div>
           </div>
         </div>
       </section>
 
       <section className="gallerySection">
-        <FavoritesBar favoriteCount={favoriteCount} />
+        <FavoritesBar favoriteCount={favoriteCount} isFavoritesPage />
 
-        {isLoading && <GallerySkeleton />}
+        {isLoading && <FavoritesSkeleton />}
 
         {error && (
           <div className="galleryMessage galleryMessageError">
-            <h2>Не вдалося завантажити інвентар</h2>
+            <h2>Не вдалося завантажити обране</h2>
             <p>{error}</p>
           </div>
         )}
 
         {isEmpty && (
           <div className="galleryMessage">
-            <h2>Інвентар поки порожній</h2>
-            <p>Додайте кілька позицій в адмін-панелі, і вони з’являться тут.</p>
+            <h2>Список улюблених порожній</h2>
+            <p>Додай позиції з галереї через кнопку ♥, і вони з’являться тут.</p>
           </div>
         )}
 
-        {!isLoading && !error && items.length > 0 && (
+        {!isLoading && !error && favoriteItems.length > 0 && (
           <InventoryGallery
-            items={items}
+            items={favoriteItems}
             onOpen={setSelectedItem}
             favoriteIds={favoriteIds}
             onToggleFavorite={toggleFavorite}
@@ -117,4 +121,4 @@ function GalleryPage() {
   )
 }
 
-export default GalleryPage
+export default FavoritesPage
